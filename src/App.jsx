@@ -19,6 +19,25 @@ export const App = () => {
     // todoTextの状態に変更を加える（setTodoText）＝入力値を初期化
     setTodoText("");
   };
+  // 削除ボタンを押したときに未完了リストから削除
+  const onClickDelete = (index) => {
+    const newTodos = [...incompleteTodos];
+    // index番目から1個削除
+    newTodos.splice(index, 1);
+    // incompleteTodosの状態に変更を加える（setIncompleteTodos）＝未完了リストを更新
+    setIncompleteTodos(newTodos);
+  };
+  // 完了ボタンを押したときに未完了リストから削除＆完了TODOに追加
+  const onClickComplete = (index) => {
+    // 未完了リストから削除
+    const newTodos = [...incompleteTodos];
+    newTodos.splice(index, 1);
+    setIncompleteTodos(newTodos);
+    // 未完了リストで完了を押された要素と完了リスト内の要素を結合し１つのリストに
+    const newCompleteTodos = [...completeTodos, incompleteTodos[index]];
+    // completeTodosの状態に変更を加える（setCompleteTodos）＝完了リストを更新
+    setCompleteTodos(newCompleteTodos);
+  };
 
   return (
     <>
@@ -35,13 +54,14 @@ export const App = () => {
       <div className="incomplete-area">
         <p className="title">未完了のTODO</p>
         <ul>
-          {incompleteTodos.map((todo) => {
+          {incompleteTodos.map((todo, index) => {
             return (
               // 親タグにkeyを設定していないと変更差分のみの読み取りにならない(仮想DOM)
               <div key={todo} className="list-row">
                 <li>{todo}</li>
-                <button>完了</button>
-                <button>削除</button>
+                <button onClick={() => onClickComplete(index)}>完了</button>
+                {/* 処理する関数に引数を渡すときはアロー関数を設定しないとClickしなくても処理が走ってしまう */}
+                <button onClick={() => onClickDelete(index)}>削除</button>
               </div>
             );
           })}
