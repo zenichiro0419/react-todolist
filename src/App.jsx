@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./style.css";
+import { InputTodo } from "./components/InputTodo";
 
 export const App = () => {
   const [todoText, setTodoText] = useState("");
@@ -9,7 +10,7 @@ export const App = () => {
   // 入力したときのフォーム欄に変更を加える。入力値の取り方はお決まりなので覚える。
   const onChangeTodoText = (event) => setTodoText(event.target.value);
   //　追加ボタンを押したときに未完了リストに追加
-  const onClockAdd = () => {
+  const onClickAdd = () => {
     // 何も入力してないときは状態に変更を加えない
     if (todoText === "") return;
     // 未完了のtodoと入力したtodoを１つの配列に格納
@@ -51,15 +52,11 @@ export const App = () => {
 
   return (
     <>
-      <div className="input-area">
-        <input
-          placeholder="TODOを入力"
-          value={todoText}
-          // onChangeを定義すると{}内の処理でevent引数が使える
-          onChange={onChangeTodoText}
-        />
-        <button onClick={onClockAdd}>追加</button>
-      </div>
+      <InputTodo
+        todoText={todoText}
+        onChange={onChangeTodoText}
+        onClick={onClickAdd}
+      />
 
       <div className="incomplete-area">
         <p className="title">未完了のTODO</p>
