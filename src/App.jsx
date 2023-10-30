@@ -3,8 +3,8 @@ import "./style.css";
 
 export const App = () => {
   const [todoText, setTodoText] = useState("");
-  const [incompleteTodos, setIncompleteTodos] = useState(["あああ", "いいい"]);
-  const [completeTodos, setCompleteTodos] = useState(["ううう"]);
+  const [incompleteTodos, setIncompleteTodos] = useState([]);
+  const [completeTodos, setCompleteTodos] = useState([]);
 
   // 入力したときのフォーム欄に変更を加える。入力値の取り方はお決まりなので覚える。
   const onChangeTodoText = (event) => setTodoText(event.target.value);
@@ -37,6 +37,16 @@ export const App = () => {
     const newCompleteTodos = [...completeTodos, incompleteTodos[index]];
     // completeTodosの状態に変更を加える（setCompleteTodos）＝完了リストを更新
     setCompleteTodos(newCompleteTodos);
+  };
+  // 戻すボタンを押したときに完了リストから削除＆未完了TODOに追加
+  const onClickBack = (index) => {
+    // 完了リストから削除
+    const newCompleteTodos = [...completeTodos];
+    newCompleteTodos.splice(index, 1);
+    setCompleteTodos(newCompleteTodos);
+    // 未完了リストに追加
+    const newIncompleteTodos = [...incompleteTodos, completeTodos[index]];
+    setIncompleteTodos(newIncompleteTodos);
   };
 
   return (
@@ -71,12 +81,12 @@ export const App = () => {
       <div className="complete-area">
         <p className="title">完了のTODO</p>
         <ul>
-          {completeTodos.map((todo) => {
+          {completeTodos.map((todo, index) => {
             return (
               // 親タグにkeyを設定していないと変更差分のみの読み取りにならない(仮想DOM)
               <div key={todo} className="list-row">
                 <li>{todo}</li>
-                <button>戻す</button>
+                <button onClick={() => onClickBack(index)}>戻す</button>
               </div>
             );
           })}
